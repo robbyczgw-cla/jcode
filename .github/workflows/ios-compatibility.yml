@@ -1,0 +1,82 @@
+name: iOS Compatibility
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - ios15-se1-backport
+    paths:
+      - "ios/**"
+      - ".github/workflows/ios-compatibility.yml"
+  pull_request:
+    paths:
+      - "ios/**"
+      - ".github/workflows/ios-compatibility.yml"
+
+concurrency:
+  group: ios-compatibility-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test-and-build:
+    name: JCodeKit tests and unsigned simulator build
+    runs-on: macos-latest
+    timeout-minutes: 30
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install XcodeGen
+        run: brew install xcodegen
+
+      - name: Record toolchain
+        run: |
+          mkdir -p artifacts/backport-baseline
+          {
+            sw_vers
+            xcodebuild -version
+            swift --version
+            xcodegen --version
+          } | tee artifacts/backport-baseline/toolchain.txt
+
+      - name: Run JCodeKit tests
+        working-directory: ios
+        run: |
+          set -o pipefail
+          swift test 2>&1 | tee ../artifacts/backport-baseline/swift-test.txt
+
+      - name: Generate Xcode project
+        working-directory: ios
+        run: xcodegen generate
+
+      - name: Record build settings
+        working-directory: ios
+        run: |
+          xcodebuild \
+            -project JCodeMobile.xcodeproj \
+            -scheme JCodeMobile \
+            -configuration Debug \
+            -destination "generic/platform=iOS Simulator" \
+            -showBuildSettings \
+            > ../artifacts/backport-baseline/build-settings.txt
+
+      - name: Build app target for iOS simulator without signing
+        working-directory: ios
+        run: |
+          set -o pipefail
+          xcodebuild build \
+            -project JCodeMobile.xcodeproj \
+            -scheme JCodeMobile \
+            -configuration Debug \
+            -destination "generic/platform=iOS Simulator" \
+            CODE_SIGNING_ALLOWED=NO \
+            2>&1 | tee ../artifacts/backport-baseline/xcodebuild.txt
+
+      - name: Upload compatibility logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-compatibility-${{ github.run_id }}
+          path: artifacts/backport-baseline
+          if-no-files-found: warn
+          retention-days: 14
