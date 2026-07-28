@@ -13,7 +13,7 @@ struct SettingsView: View {
     static let reasoningEfforts = ["none", "low", "medium", "high", "xhigh"]
 
     var body: some View {
-        NavigationStack {
+        NavigationView {
             List {
                 modelSection
                 if model.session.reasoningEffort != nil {
@@ -34,6 +34,7 @@ struct SettingsView: View {
                 }
             }
         }
+        .navigationViewStyle(StackNavigationViewStyle())
         .preferredColorScheme(.dark)
         .alert("Rename session", isPresented: $showRename) {
             TextField("Title", text: $renameDraft)
@@ -43,7 +44,7 @@ struct SettingsView: View {
             Button("Cancel", role: .cancel) {}
         }
         .sheet(isPresented: $showPairNew) {
-            NavigationStack {
+            NavigationView {
                 PairingView()
                     .background(Theme.background)
                     .toolbar {
@@ -52,6 +53,7 @@ struct SettingsView: View {
                         }
                     }
             }
+            .navigationViewStyle(StackNavigationViewStyle())
             .preferredColorScheme(.dark)
         }
         .onChange(of: model.activeServer?.id) { _ in
