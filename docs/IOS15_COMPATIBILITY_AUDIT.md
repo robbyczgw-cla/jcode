@@ -68,8 +68,8 @@ The final source diff contains no changes in `ios/Sources/JCodeKit` or `ios/Test
 
 - Unmodified upstream baseline: [Actions run 30378214285](https://github.com/robbyczgw-cla/jcode/actions/runs/30378214285) — tests, XcodeGen, and unsigned simulator build passed.
 - First iOS 15 target build: [Actions run 30378471209](https://github.com/robbyczgw-cla/jcode/actions/runs/30378471209) — JCodeKit tests passed; the app failed on the expected Observation availability diagnostics.
-- Final compatibility source commit: `919555122117580bb7f05500ff8d3f07331e01e5`.
-- Final iOS 15 gate: [Actions run 30380080697](https://github.com/robbyczgw-cla/jcode/actions/runs/30380080697) — 71 tests passed, XcodeGen succeeded, and the unsigned app build succeeded.
+- Final compatibility source commit: `efbbe29828a047fc254b674757d4255eb1eaff05`.
+- Final iOS 15 gate: [Actions run 30380711472](https://github.com/robbyczgw-cla/jcode/actions/runs/30380711472) — 71 tests passed, XcodeGen succeeded, and the unsigned app build succeeded.
 - Generated build settings contain only `IPHONEOS_DEPLOYMENT_TARGET = 15.0`.
 - Runner toolchain: macOS 26.4, Xcode 26.5 (`17F42`), Swift 6.3.2.
 - Downloaded evidence is retained locally under `artifacts/backport-baseline/`, `artifacts/ios15-first-build.txt`, and `artifacts/ios15-green/` (excluded from Git history).
