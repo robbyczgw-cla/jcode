@@ -2,7 +2,7 @@ name: JCodeMobile
 options:
   bundleIdPrefix: com.jcode
   deploymentTarget:
-    iOS: "17.0"
+    iOS: "15.0"
   generateEmptyDirectories: true
 
 settings:
