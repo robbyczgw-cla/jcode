@@ -3,6 +3,7 @@ import SwiftUI
 /// Message composer with send/interrupt.
 struct Composer: View {
     @Environment(\.compactEdgePads) private var edgePads
+    @State private var composerHeight: CGFloat = 44
     @Binding var draft: String
     let isProcessing: Bool
     let isConnected: Bool
@@ -11,16 +12,15 @@ struct Composer: View {
 
     var body: some View {
         HStack(alignment: .bottom, spacing: 8) {
-            TextField(
-                isProcessing ? "Queue a message..." : "Message",
+            GrowingTextView(
                 text: $draft,
-                axis: .vertical
+                placeholder: isProcessing ? "Queue a message..." : "Message",
+                minHeight: 44,
+                maxHeight: 120,
+                calculatedHeight: $composerHeight
             )
-            .lineLimit(1...6)
-            .font(.body)
-            .foregroundStyle(Theme.textPrimary)
-            .padding(.horizontal, 12)
-            .padding(.vertical, 8)
+            .frame(maxWidth: .infinity)
+            .frame(height: composerHeight)
             .background(Theme.surface)
             .clipShape(RoundedRectangle(cornerRadius: 20))
             .overlay(
@@ -52,7 +52,7 @@ struct Composer: View {
             .disabled(!canSend)
             .accessibilityLabel(isProcessing ? "Queue message" : "Send message")
         }
-        .padding(.horizontal, 16)
+        .padding(.horizontal, 12)
         .padding(.vertical, 8)
         .padding(.bottom, edgePads.bottom)
         .background(Theme.background)
