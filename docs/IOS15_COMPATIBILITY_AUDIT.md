@@ -69,10 +69,10 @@ The final source diff contains no changes in `ios/Sources/JCodeKit` or `ios/Test
 - Unmodified upstream baseline: [Actions run 30378214285](https://github.com/robbyczgw-cla/jcode/actions/runs/30378214285) — tests, XcodeGen, and unsigned simulator build passed.
 - First iOS 15 target build: [Actions run 30378471209](https://github.com/robbyczgw-cla/jcode/actions/runs/30378471209) — JCodeKit tests passed; the app failed on the expected Observation availability diagnostics.
 - Final compatibility source commit: `efbbe29828a047fc254b674757d4255eb1eaff05`.
-- Final iOS 15 gate: [Actions run 30380711472](https://github.com/robbyczgw-cla/jcode/actions/runs/30380711472) — 71 tests passed, XcodeGen succeeded, and the unsigned app build succeeded.
+- Final iOS 15 gate: [Actions run 30381121561](https://github.com/robbyczgw-cla/jcode/actions/runs/30381121561) — 71 tests passed, XcodeGen succeeded, and both unsigned generic Simulator and `iphoneos` Device builds succeeded.
 - Generated build settings contain only `IPHONEOS_DEPLOYMENT_TARGET = 15.0`.
 - Runner toolchain: macOS 26.4, Xcode 26.5 (`17F42`), Swift 6.3.2.
-- Downloaded evidence is retained locally under `artifacts/backport-baseline/`, `artifacts/ios15-first-build.txt`, and `artifacts/ios15-green/` (excluded from Git history).
+- Downloaded evidence is retained locally under `artifacts/backport-baseline/`, `artifacts/ios15-first-build.txt`, and `artifacts/ios15-green-device/` (excluded from Git history).
 
 ## iPhone SE1 layout risks
 
@@ -86,6 +86,6 @@ The final source diff contains no changes in `ios/Sources/JCodeKit` or `ios/Test
 
 1. **Complete:** unmodified-source baseline with `swift test`, XcodeGen generation, and unsigned generic simulator build.
 2. **Complete:** target-lowering failure build and compiler-driven compatibility sequence.
-3. **Complete for current compatibility source:** `git diff --check`, 71 JCodeKit tests, generated target verification, and unsigned app build.
+3. **Complete for current compatibility source:** `git diff --check`, 71 JCodeKit tests, generated target verification, unsigned Simulator build, and unsigned generic Device build.
 4. **Pending hardware:** signed install and hands-on smoke test on a real iPhone SE1 with iOS 15.
 5. A modern simulator build is necessary but not sufficient: availability checking comes from the deployment target, while SE1 performance/layout and iOS 15 runtime behavior require the real device.
