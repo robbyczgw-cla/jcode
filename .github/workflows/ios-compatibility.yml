@@ -64,13 +64,27 @@ jobs:
         working-directory: ios
         run: |
           set -o pipefail
-          xcodebuild build \
+          xcodebuild \
             -project JCodeMobile.xcodeproj \
             -scheme JCodeMobile \
-            -configuration Debug \
+            -sdk iphonesimulator \
             -destination "generic/platform=iOS Simulator" \
+            -configuration Debug \
             CODE_SIGNING_ALLOWED=NO \
-            2>&1 | tee ../artifacts/backport-baseline/xcodebuild.txt
+            build 2>&1 | tee ../artifacts/backport-baseline/xcodebuild.txt
+
+      - name: Build app target for generic iOS device without signing
+        working-directory: ios
+        run: |
+          set -o pipefail
+          xcodebuild \
+            -project JCodeMobile.xcodeproj \
+            -scheme JCodeMobile \
+            -sdk iphoneos \
+            -destination "generic/platform=iOS" \
+            -configuration Debug \
+            CODE_SIGNING_ALLOWED=NO \
+            build 2>&1 | tee ../artifacts/backport-baseline/xcodebuild-device.txt
 
       - name: Upload compatibility logs
         if: always()
