@@ -6,7 +6,7 @@ struct ChatView: View {
     @EnvironmentObject private var model: AppModel
     @Environment(\.compactEdgePads) private var edgePads
     @State private var showSettings = false
-    @State private var sendCount = 0
+    @State private var previousFinishedToolCallCount = 0
 
     var body: some View {
         VStack(spacing: 0) {
@@ -55,7 +55,7 @@ struct ChatView: View {
                 isProcessing: model.session.isProcessing,
                 isConnected: model.isConnected,
                 onSend: {
-                    sendCount += 1
+                    Haptics.send()
                     model.sendDraft()
                 },
                 onInterrupt: { model.interrupt() }
@@ -64,12 +64,19 @@ struct ChatView: View {
         .sheet(isPresented: $showSettings) {
             SettingsView()
         }
-        .sensoryFeedback(.impact(weight: .light), trigger: sendCount)
-        .sensoryFeedback(.impact(flexibility: .soft), trigger: finishedToolCallCount) {
-            $1 > $0
+        .onAppear {
+            previousFinishedToolCallCount = finishedToolCallCount
         }
-        .sensoryFeedback(.error, trigger: model.session.errorBanner) {
-            $1 != nil
+        .onChange(of: finishedToolCallCount) { newValue in
+            if newValue > previousFinishedToolCallCount {
+                Haptics.toolFinished()
+            }
+            previousFinishedToolCallCount = newValue
+        }
+        .onChange(of: model.session.errorBanner) { newValue in
+            if newValue != nil {
+                Haptics.error()
+            }
         }
     }
 
