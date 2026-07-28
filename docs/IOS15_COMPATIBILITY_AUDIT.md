@@ -15,33 +15,33 @@ This document distinguishes confirmed availability failures from compiler-gated 
 
 | File | Line(s) at audited commit | API / construct | Minimum iOS | Minimal replacement | Status |
 |---|---:|---|---:|---|---|
-| `ios/project.yml` | 4–5 | deployment target 17.0 | n/a | Set generated app deployment target to 15.0 | Pending |
-| `ios/Package.swift` | 6–8 | `.iOS(.v17)` | n/a | Set package platform to `.iOS(.v15)`; keep macOS 14 | Pending |
-| `AppModel.swift` | 3, 11 | Observation / `@Observable` | 17 | `ObservableObject` plus `@Published`; preserve reducer and transport behavior | Pending |
-| `JCodeMobileApp.swift` | 5, 11 | Observation ownership and `.environment(model)` | 17 | `@StateObject` plus `.environmentObject(model)` | Pending |
-| `RootView.swift` | 6 | `@Environment(AppModel.self)` | 17 | `@EnvironmentObject var model: AppModel` | Pending |
-| `ChatView.swift` | 6, 12, 52 | Observation environment / `@Bindable` | 17 | Environment object and explicit `Binding(get:set:)` for `draft` | Pending |
-| `PairingView.swift` | 6 | `@Environment(AppModel.self)` | 17 | Environment object | Pending |
-| `SettingsView.swift` | 6 | `@Environment(AppModel.self)` | 17 | Environment object | Pending |
-| `SettingsSections.swift` | 6, 90, 146 | `@Environment(AppModel.self)` | 17 | Environment object | Pending |
-| `JCodeMobileApp.swift` | 14 | two-argument `onChange` closure | 17 | one-argument iOS 15 closure | Pending |
-| `SettingsView.swift` | 57 | zero-argument `onChange` closure | 17 | one-argument closure, ignore value | Pending |
-| `TranscriptView.swift` | 70, 74 | zero-argument `onChange` closures | 17 | one-argument closures, ignore values | Pending |
-| `SettingsView.swift` | 16, 46 | `NavigationStack` | 16 | `NavigationView` with `StackNavigationViewStyle` | Pending |
-| `Composer.swift` | 14–19 | vertically growing `TextField(axis:)` and ranged line limit | 16 | local `UITextView`/`UIViewRepresentable` growing composer | Pending |
-| `PairingView.swift` | 83 | `scrollDismissesKeyboard` | 16 | one compatibility view modifier using drag-to-resign-first-responder | Pending |
-| `TranscriptView.swift` | 61 | `scrollDismissesKeyboard` | 16 | same shared compatibility modifier | Pending |
-| `SettingsView.swift` | 26 | `scrollContentBackground` | 16 | remove; keep row backgrounds, add one scoped UIKit fallback only if visually required | Pending |
-| `ChatView.swift` | 65–70 | `sensoryFeedback` | 17 | UIKit feedback generators triggered at existing state transitions | Pending |
+| `ios/project.yml` | 4–5 | deployment target 17.0 | n/a | Set generated app deployment target to 15.0 | Complete |
+| `ios/Package.swift` | 6–8 | `.iOS(.v17)` | n/a | Set package platform to `.iOS(.v15)`; keep macOS 14 | Complete |
+| `AppModel.swift` | 3, 11 | Observation / `@Observable` | 17 | `ObservableObject` plus `@Published`; preserve reducer and transport behavior | Complete |
+| `JCodeMobileApp.swift` | 5, 11 | Observation ownership and `.environment(model)` | 17 | `@StateObject` plus `.environmentObject(model)` | Complete |
+| `RootView.swift` | 6 | `@Environment(AppModel.self)` | 17 | `@EnvironmentObject var model: AppModel` | Complete |
+| `ChatView.swift` | 6, 12, 52 | Observation environment / `@Bindable` | 17 | Environment object and explicit `Binding(get:set:)` for `draft` | Complete |
+| `PairingView.swift` | 6 | `@Environment(AppModel.self)` | 17 | Environment object | Complete |
+| `SettingsView.swift` | 6 | `@Environment(AppModel.self)` | 17 | Environment object | Complete |
+| `SettingsSections.swift` | 6, 90, 146 | `@Environment(AppModel.self)` | 17 | Environment object | Complete |
+| `JCodeMobileApp.swift` | 14 | two-argument `onChange` closure | 17 | one-argument iOS 15 closure | Complete |
+| `SettingsView.swift` | 57 | zero-argument `onChange` closure | 17 | one-argument closure, ignore value | Complete |
+| `TranscriptView.swift` | 70, 74 | zero-argument `onChange` closures | 17 | one-argument closures, ignore values | Complete |
+| `SettingsView.swift` | 16, 46 | `NavigationStack` | 16 | `NavigationView` with `StackNavigationViewStyle` | Complete |
+| `Composer.swift` | 14–19 | vertically growing `TextField(axis:)` and ranged line limit | 16 | local `UITextView`/`UIViewRepresentable` growing composer | Complete |
+| `PairingView.swift` | 83 | `scrollDismissesKeyboard` | 16 | one compatibility view modifier using drag-to-resign-first-responder | Complete |
+| `TranscriptView.swift` | 61 | `scrollDismissesKeyboard` | 16 | same shared compatibility modifier | Complete |
+| `SettingsView.swift` | 26 | `scrollContentBackground` | 16 | remove; keep row backgrounds, add one scoped UIKit fallback only if visually required | Complete |
+| `ChatView.swift` | 65–70 | `sensoryFeedback` | 17 | UIKit feedback generators triggered at existing state transitions | Complete |
 
 ## Compiler-gated risks — do not change speculatively
 
-| File | Line(s) | Construct | Current strategy |
+| File | Line(s) | Construct | Compiler result |
 |---|---:|---|---|
-| `Theme.swift` | 58–60 | SwiftUI `@Entry` environment declaration | Try the iOS 15 deployment build first. If unavailable, replace only this declaration with an explicit private `EnvironmentKey`; callers remain unchanged. |
-| `TranscriptView.swift` | 62–68 | `MainActor.assumeIsolated` inside preference callback | Keep if the deployment build accepts it. Otherwise dispatch the state mutation to the main queue without deleting pinning behavior. |
-| `ToolCallCard.swift` / `TranscriptView.swift` | progress views | `.controlSize(.mini/.small)` | Build-gated. Preserve unless Xcode reports an availability error. |
-| `PairingView.swift` | 31–32 | input capitalization/autocorrection modifiers | Expected to support iOS 15; change only on a concrete compiler error. |
+| `Theme.swift` | 58–60 | SwiftUI `@Entry` environment declaration | Accepted by the iOS 15 deployment build; preserved unchanged. |
+| `TranscriptView.swift` | 62–68 | `MainActor.assumeIsolated` inside preference callback | Accepted by the iOS 15 deployment build; pinning behavior preserved unchanged. |
+| `ToolCallCard.swift` / `TranscriptView.swift` | progress views | `.controlSize(.mini/.small)` | Accepted by the iOS 15 deployment build; preserved unchanged. |
+| `PairingView.swift` | 31–32 | input capitalization/autocorrection modifiers | Accepted by the iOS 15 deployment build; preserved unchanged. |
 
 ## APIs verified as compatible with iOS 15
 
@@ -56,13 +56,23 @@ The following matched the broad scan but should remain:
 - Swift `AttributedString` markdown parsing
 - `UIViewControllerRepresentable`, AVFoundation QR capture, and UIKit feedback generators
 - SwiftUI sheet, alert, toolbar, and `ToolbarItem` forms currently used
-- `URLSessionWebSocketTask`, Security/Keychain, Codable, actors, and async streams in JCodeKit, subject to the deployment compiler gate
+- `URLSessionWebSocketTask`, Security/Keychain, Codable, actors, and async streams in JCodeKit
 
 No occurrences were found for `ContentUnavailableView`, `presentationDetents`, `NavigationSplitView`, `ShareLink`, `PhotosPicker`, `ViewThatFits`, `AnyLayout`, `Grid`, `symbolEffect`, scroll-target APIs, or other obvious iOS 16/17-only UI families.
 
 ## JCodeKit boundary
 
-Initial source inspection found no reason to move UI compatibility code into `JCodeKit`. The package deployment declaration must move to iOS 15, but pairing, keychain storage, WebSocket transport, connection actor, wire types, and reducer semantics should remain unchanged unless the real compiler or tests identify a concrete issue.
+The final source diff contains no changes in `ios/Sources/JCodeKit` or `ios/Tests/JCodeKitTests`. Only the package deployment declaration moved to iOS 15. Pairing, keychain storage, WebSocket transport, connection actor, wire types, reducer semantics, and server protocol remain unchanged. All 71 JCodeKit tests pass with the iOS 15 package declaration.
+
+## Recorded compiler evidence
+
+- Unmodified upstream baseline: [Actions run 30378214285](https://github.com/robbyczgw-cla/jcode/actions/runs/30378214285) — tests, XcodeGen, and unsigned simulator build passed.
+- First iOS 15 target build: [Actions run 30378471209](https://github.com/robbyczgw-cla/jcode/actions/runs/30378471209) — JCodeKit tests passed; the app failed on the expected Observation availability diagnostics.
+- Final compatibility source commit: `919555122117580bb7f05500ff8d3f07331e01e5`.
+- Final iOS 15 gate: [Actions run 30380080697](https://github.com/robbyczgw-cla/jcode/actions/runs/30380080697) — 71 tests passed, XcodeGen succeeded, and the unsigned app build succeeded.
+- Generated build settings contain only `IPHONEOS_DEPLOYMENT_TARGET = 15.0`.
+- Runner toolchain: macOS 26.4, Xcode 26.5 (`17F42`), Swift 6.3.2.
+- Downloaded evidence is retained locally under `artifacts/backport-baseline/`, `artifacts/ios15-first-build.txt`, and `artifacts/ios15-green/` (excluded from Git history).
 
 ## iPhone SE1 layout risks
 
@@ -74,8 +84,8 @@ Initial source inspection found no reason to move UI compatibility code into `JC
 
 ## Validation gates
 
-1. Unmodified-source baseline: `swift test`, XcodeGen generation, unsigned generic simulator build.
-2. After target lowering: repeat the same gates and treat compiler diagnostics as the authoritative patch list.
-3. After each compatibility commit: `git diff --check`, JCodeKit tests, unsigned app build.
-4. Before device claim: signed install and hands-on smoke test on a real iPhone SE1 with iOS 15.
+1. **Complete:** unmodified-source baseline with `swift test`, XcodeGen generation, and unsigned generic simulator build.
+2. **Complete:** target-lowering failure build and compiler-driven compatibility sequence.
+3. **Complete for current compatibility source:** `git diff --check`, 71 JCodeKit tests, generated target verification, and unsigned app build.
+4. **Pending hardware:** signed install and hands-on smoke test on a real iPhone SE1 with iOS 15.
 5. A modern simulator build is necessary but not sufficient: availability checking comes from the deployment target, while SE1 performance/layout and iOS 15 runtime behavior require the real device.
