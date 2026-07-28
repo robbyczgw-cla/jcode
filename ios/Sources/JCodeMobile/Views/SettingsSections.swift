@@ -3,7 +3,7 @@ import SwiftUI
 
 /// Sessions, servers, and info sections, split out to keep view files small.
 struct SettingsSessionsSection: View {
-    @Environment(AppModel.self) private var model
+    @EnvironmentObject private var model: AppModel
     @Environment(\.dismiss) private var dismiss
     @Binding var renameDraft: String
     @Binding var showRename: Bool
@@ -87,7 +87,7 @@ struct SettingsSessionsSection: View {
 }
 
 struct SettingsServersSection: View {
-    @Environment(AppModel.self) private var model
+    @EnvironmentObject private var model: AppModel
     @Environment(\.dismiss) private var dismiss
     @Binding var showPairNew: Bool
 
@@ -143,7 +143,7 @@ struct SettingsServersSection: View {
 }
 
 struct SettingsInfoSection: View {
-    @Environment(AppModel.self) private var model
+    @EnvironmentObject private var model: AppModel
 
     var body: some View {
         Section("Info") {

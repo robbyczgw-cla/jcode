@@ -3,7 +3,7 @@ import SwiftUI
 
 /// Settings sheet: model picker, reasoning effort, sessions, servers, info.
 struct SettingsView: View {
-    @Environment(AppModel.self) private var model
+    @EnvironmentObject private var model: AppModel
     @Environment(\.dismiss) private var dismiss
     @State var renameDraft = ""
     @State var showRename = false

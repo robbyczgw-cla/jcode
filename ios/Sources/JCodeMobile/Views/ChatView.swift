@@ -3,13 +3,12 @@ import SwiftUI
 
 /// Main conversation screen.
 struct ChatView: View {
-    @Environment(AppModel.self) private var model
+    @EnvironmentObject private var model: AppModel
     @Environment(\.compactEdgePads) private var edgePads
     @State private var showSettings = false
     @State private var sendCount = 0
 
     var body: some View {
-        @Bindable var model = model
         VStack(spacing: 0) {
             header
 
@@ -49,7 +48,10 @@ struct ChatView: View {
             }
 
             Composer(
-                draft: $model.draft,
+                draft: Binding(
+                    get: { model.draft },
+                    set: { model.draft = $0 }
+                ),
                 isProcessing: model.session.isProcessing,
                 isConnected: model.isConnected,
                 onSend: {

@@ -3,7 +3,7 @@ import SwiftUI
 
 /// First-run pairing: scan QR or type host/port/code.
 struct PairingView: View {
-    @Environment(AppModel.self) private var model
+    @EnvironmentObject private var model: AppModel
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     @State private var host = ""

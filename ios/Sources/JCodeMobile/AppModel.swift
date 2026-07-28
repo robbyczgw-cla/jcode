@@ -1,6 +1,6 @@
+import Combine
 import Foundation
 import JCodeKit
-import Observation
 
 /// Observable glue between JCodeKit and the SwiftUI views.
 ///
@@ -8,16 +8,15 @@ import Observation
 /// `SessionState`. Contains no protocol or state-transition logic itself;
 /// everything flows through `SessionReducer`.
 @MainActor
-@Observable
-final class AppModel {
+final class AppModel: ObservableObject {
     // MARK: - Published state
 
-    private(set) var session = SessionState()
-    private(set) var servers: [ServerCredential] = []
-    var activeServer: ServerCredential?
+    @Published private(set) var session = SessionState()
+    @Published private(set) var servers: [ServerCredential] = []
+    @Published var activeServer: ServerCredential?
 
     /// Composer draft.
-    var draft = ""
+    @Published var draft = ""
 
     // MARK: - Internals
 

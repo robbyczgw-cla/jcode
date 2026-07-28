@@ -2,13 +2,13 @@ import SwiftUI
 
 @main
 struct JCodeMobileApp: App {
-    @State private var model = AppModel()
+    @StateObject private var model = AppModel()
     @Environment(\.scenePhase) private var scenePhase
 
     var body: some Scene {
         WindowGroup {
             RootView()
-                .environment(model)
+                .environmentObject(model)
                 .preferredColorScheme(.dark)
         }
         .onChange(of: scenePhase) { _, phase in

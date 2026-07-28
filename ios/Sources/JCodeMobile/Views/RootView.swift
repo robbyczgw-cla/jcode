@@ -3,7 +3,7 @@ import SwiftUI
 
 /// Top-level router: pairing when no server, chat otherwise.
 struct RootView: View {
-    @Environment(AppModel.self) private var model
+    @EnvironmentObject private var model: AppModel
     @State private var deepLinkError: String?
 
     var body: some View {
