@@ -80,7 +80,7 @@ struct PairingView: View {
             }
             .padding(16)
         }
-        .scrollDismissesKeyboard(.interactively)
+        .dismissKeyboardOnDrag()
         .dynamicTypeSize(.large ... .accessibility3)
         .sheet(isPresented: $showScanner) {
             QRScannerView { scanned in

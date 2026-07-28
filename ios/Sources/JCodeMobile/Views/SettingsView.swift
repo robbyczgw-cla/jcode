@@ -23,7 +23,6 @@ struct SettingsView: View {
                 SettingsServersSection(showPairNew: $showPairNew)
                 SettingsInfoSection()
             }
-            .scrollContentBackground(.hidden)
             .background(Theme.background)
             .dynamicTypeSize(.large ... .accessibility3)
             .navigationTitle("Settings")
