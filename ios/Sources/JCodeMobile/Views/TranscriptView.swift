@@ -67,11 +67,11 @@ struct TranscriptView: View {
                     }
                 }
             }
-            .onChange(of: entries.last?.text) {
+            .onChange(of: entries.last?.text) { _ in
                 guard isPinnedToBottom else { return }
                 proxy.scrollTo("bottom", anchor: .bottom)
             }
-            .onChange(of: entries.count) {
+            .onChange(of: entries.count) { _ in
                 // Follow new entries when pinned; always follow the user's
                 // own sends so their message never lands off-screen.
                 if isPinnedToBottom || entries.last?.role == .user {

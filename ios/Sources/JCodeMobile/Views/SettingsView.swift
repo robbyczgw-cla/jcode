@@ -54,7 +54,7 @@ struct SettingsView: View {
             }
             .preferredColorScheme(.dark)
         }
-        .onChange(of: model.activeServer?.id) {
+        .onChange(of: model.activeServer?.id) { _ in
             showPairNew = false
         }
     }

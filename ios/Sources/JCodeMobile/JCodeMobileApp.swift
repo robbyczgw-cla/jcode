@@ -11,7 +11,7 @@ struct JCodeMobileApp: App {
                 .environmentObject(model)
                 .preferredColorScheme(.dark)
         }
-        .onChange(of: scenePhase) { _, phase in
+        .onChange(of: scenePhase) { phase in
             // iOS suspends sockets in the background; reconnect eagerly when
             // the user returns instead of waiting for a receive to fail and
             // back off. Connection.start resyncs history on resubscribe, so
