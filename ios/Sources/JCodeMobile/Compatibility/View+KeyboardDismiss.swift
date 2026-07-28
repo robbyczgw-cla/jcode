@@ -2,9 +2,18 @@ import SwiftUI
 import UIKit
 
 extension View {
-    /// iOS 15 replacement for `scrollDismissesKeyboard(.interactively)`.
-    /// Keeps the scroll gesture intact while resigning the active text input.
-    func dismissKeyboardOnDrag() -> some View {
+    /// Keeps native interactive dismissal on iOS 16+ and falls back to a
+    /// simultaneous drag gesture on iOS 15.
+    @ViewBuilder
+    func dismissKeyboardOnScroll() -> some View {
+        if #available(iOS 16.0, *) {
+            scrollDismissesKeyboard(.interactively)
+        } else {
+            dismissKeyboardOnDrag()
+        }
+    }
+
+    private func dismissKeyboardOnDrag() -> some View {
         simultaneousGesture(
             DragGesture(minimumDistance: 8)
                 .onChanged { _ in

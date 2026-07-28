@@ -23,6 +23,7 @@ struct SettingsView: View {
                 SettingsServersSection(showPairNew: $showPairNew)
                 SettingsInfoSection()
             }
+            .hideListBackgroundWhenAvailable()
             .background(Theme.background)
             .dynamicTypeSize(.large ... .accessibility3)
             .navigationTitle("Settings")

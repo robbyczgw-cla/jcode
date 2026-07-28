@@ -58,7 +58,7 @@ struct TranscriptView: View {
                 )
             }
             .coordinateSpace(name: "transcript")
-            .dismissKeyboardOnDrag()
+            .dismissKeyboardOnScroll()
             .onPreferenceChange(BottomDistanceKey.self) { distance in
                 MainActor.assumeIsolated {
                     let pinned = distance < Self.pinThreshold
